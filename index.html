@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Idrees Aziz - Game Developer</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #0f0f23;
+            --accent-color: #ffe3bb;
+            --secondary-color: #8892b0;
+            --text-light: #ccd6f6;
+            --text-dark: #a8b2d1;
+            --highlight: #ff6b6b;
+            --card-bg: rgba(17, 34, 64, 0.8);
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        body {
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+            background: var(--primary-color);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Game Screenshot Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: url('s1.png'); /* Replace with your preferred game screenshot */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: blur(8px) brightness(0.3);
+            transform: scale(1.1); /* Slightly scale up to avoid blur edges */
+        }
+
+        /* Optional: Add a subtle overlay for better text readability */
+        .bg-animation::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 15, 35, 0.6);
+            mix-blend-mode: multiply;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 2rem;
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(100, 255, 218, 0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            text-shadow: 0 0 20px var(--accent-color);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 2rem;
+            position: relative;
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-color), #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: titleGlow 3s ease-in-out infinite alternate;
+            text-shadow: 0 0 30px rgba(100, 255, 218, 0.3);
+        }
+
+        @keyframes titleGlow {
+            0% { filter: drop-shadow(0 0 10px rgba(100, 255, 218, 0.3)); }
+            100% { filter: drop-shadow(0 0 30px rgba(100, 255, 218, 0.6)); }
+        }
+
+        .hero-content h2 {
+            font-size: 2rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            font-weight: 300;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            color: var(--text-light);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+            background: rgba(15, 15, 35, 0.3);
+            padding: 1rem;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: rgba(15, 15, 35, 0.8);
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .cta-button:hover {
+            background: var(--accent-color);
+            color: var(--primary-color);
+            box-shadow: 0 0 30px rgba(100, 255, 218, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Section Styles */
+        section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            color: var(--accent-color);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--gradient-1);
+            border-radius: 2px;
+        }
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .skill-item {
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(100, 255, 218, 0.1);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .skill-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+            box-shadow: 0 10px 30px rgba(100, 255, 218, 0.1);
+        }
+
+        .skill-item i {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(100, 255, 218, 0.1);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: var(--accent-color);
+        }
+
+        .project-gallery {
+            position: relative;
+            height: 300px;
+            overflow: hidden;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .gallery-container {
+            display: flex;
+            height: 100%;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-slide {
+            min-width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            position: relative;
+        }
+
+        .gallery-slide.keebee {
+            background: var(--gradient-1);
+        }
+
+        .gallery-slide.indelirium {
+            background: var(--gradient-3);
+        }
+
+        .gallery-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .gallery-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.7;
+        }
+
+        .gallery-placeholder .slide-info {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .gallery-nav {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .gallery-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .gallery-dot.active {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(100, 255, 218, 0.5);
+        }
+
+        .gallery-arrows {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            pointer-events: none;
+        }
+
+        .gallery-arrow {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            pointer-events: all;
+            backdrop-filter: blur(10px);
+        }
+
+        .gallery-arrow:hover {
+            background: rgba(100, 255, 218, 0.2);
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            transform: scale(1.1);
+        }
+
+        .gallery-counter {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .project-content {
+            padding: 2rem;
+        }
+
+        .project-title {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+
+        .project-description {
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tech-tag {
+            background: rgba(100, 255, 218, 0.1);
+            color: var(--accent-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(100, 255, 218, 0.2);
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .project-link {
+            padding: 0.7rem 1.5rem;
+            background: transparent;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .project-link:hover {
+            background: var(--accent-color);
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .project-link.trailer {
+            border-color: var(--highlight);
+            color: var(--highlight);
+        }
+
+        .project-link.trailer:hover {
+            background: var(--highlight);
+            color: white;
+        }
+
+        /* Contact Section */
+        .contact {
+            text-align: center;
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid rgba(100, 255, 218, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-light);
+            text-decoration: none;
+            padding: 1rem 2rem;
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-link:hover {
+            color: var(--accent-color);
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-dark);
+            border-top: 1px solid rgba(100, 255, 218, 0.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .contact-links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Scroll Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <nav>
+        <div class="nav-container">
+            <a href="#home" class="logo">IA</a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Idrees Aziz</h1>
+            <h2>Gameplay Programmer & Shader Artist</h2>
+            <p>Designing captivating player experiences through dynamic gameplay systems and striking visual effects. Focused on bringing worlds to life with innovative mechanics and immersive visual storytelling.</p>
+            <a href="#projects" class="cta-button">View My Work</a>
+        </div>
+    </section>
+
+    <section id="projects" class="fade-in">
+        <h2 class="section-title">Featured Projects</h2>
+        <div class="projects-grid">
+            
+            <!-- InDelirium Project -->
+            <div class="project-card">
+                <div class="project-gallery">
+                    <div class="gallery-container" id="indelirium-gallery">
+                        <!-- Screenshot 1 -->
+                        <div class="gallery-slide indelirium">
+                            <img src="s1.png" alt="InDelirium Screenshot 1">
+                        </div>
+                        <!-- Screenshot 2 -->
+                        <div class="gallery-slide indelirium">
+                            <img src="s2.png" alt="InDelirium Screenshot 1">
+                        </div>
+                        <!-- Screenshot 3 -->
+                        <div class="gallery-slide indelirium">
+                            <img src="s3.png" alt="InDelirium Screenshot 1">
+                        </div>
+                        <!-- Screenshot 4 -->
+                        <div class="gallery-slide indelirium">
+                            <img src="s4.png" alt="InDelirium Screenshot 1">
+                        </div>
+                        <!-- Screenshot 5 -->
+                        <div class="gallery-slide indelirium">
+                            <img src="s5.png" alt="InDelirium Screenshot 1">
+                        </div>
+                        <!-- Screenshot 6 -->
+                        <div class="gallery-slide indelirium">
+                            <img src="s6.png" alt="InDelirium Screenshot 1">
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-arrows">
+                        <div class="gallery-arrow" onclick="changeSlide('indelirium', -1)">
+                            <i class="fas fa-chevron-left"></i>
+                        </div>
+                        <div class="gallery-arrow" onclick="changeSlide('indelirium', 1)">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-counter" id="indelirium-counter">1 / 6</div>
+                    
+                    <div class="gallery-nav" id="indelirium-nav">
+                        <div class="gallery-dot active" onclick="goToSlide('indelirium', 0)"></div>
+                        <div class="gallery-dot" onclick="goToSlide('indelirium', 1)"></div>
+                        <div class="gallery-dot" onclick="goToSlide('indelirium', 2)"></div>
+                        <div class="gallery-dot" onclick="goToSlide('indelirium', 3)"></div>
+                        <div class="gallery-dot" onclick="goToSlide('indelirium', 4)"></div>
+                        <div class="gallery-dot" onclick="goToSlide('indelirium', 5)"></div>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">InDelirium</h3>
+                    <p class="project-description">
+                        An artistic exploration game featuring dynamic rat swarm effects and stylized visuals. Built with Unreal Engine's Niagara VFX system and custom HLSL shaders to create a unique aesthetic experience focused on player exploration and artistic expression.
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-tag">C++</span>
+                        <span class="tech-tag">Unreal Engine 5</span>
+                        <span class="tech-tag">Niagara VFX</span>
+                        <span class="tech-tag">HLSL</span>
+                        <span class="tech-tag">Graphics Programming</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://youtu.be/nwS08RHwFjk" class="project-link trailer">
+                            <i class="fab fa-youtube"></i>
+                            Watch Trailer
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KEEBEE Project -->
+            <div class="project-card">
+                <div class="project-gallery">
+                    <div class="gallery-container" id="keebee-gallery">
+                        <!-- Screenshot 1 -->
+                        <div class="gallery-slide keebee">
+                            <img src="s7.jpg" alt="InDelirium Screenshot 1">
+                        </div>
+                        <!-- Screenshot 2 -->
+                        <div class="gallery-slide keebee">
+                            <img src="s8.jpg" alt="InDelirium Screenshot 1">
+                        </div>
+                        <!-- Screenshot 3 -->
+                        <div class="gallery-slide keebee">
+                            <img src="s9.jpg" alt="InDelirium Screenshot 1">
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-arrows">
+                        <div class="gallery-arrow" onclick="changeSlide('keebee', -1)">
+                            <i class="fas fa-chevron-left"></i>
+                        </div>
+                        <div class="gallery-arrow" onclick="changeSlide('keebee', 1)">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-counter" id="keebee-counter">1 / 4</div>
+                    
+                    <div class="gallery-nav" id="keebee-nav">
+                        <div class="gallery-dot active" onclick="goToSlide('keebee', 0)"></div>
+                        <div class="gallery-dot" onclick="goToSlide('keebee', 1)"></div>
+                        <div class="gallery-dot" onclick="goToSlide('keebee', 2)"></div>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">KEEBEE</h3>
+                    <p class="project-description">
+                        A complete game featuring core gameplay systems, AI behavior, and interactive mechanics. Includes a full backend server with user authentication, high scores, and game state management. Demonstrates end-to-end game development skills.
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-tag">C++</span>
+                        <span class="tech-tag">Unreal Engine 5</span>
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">Express.js</span>
+                        <span class="tech-tag">Firebase</span>
+                        <span class="tech-tag">AI Programming</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://youtu.be/kEeltcKh1uw" class="project-link trailer">
+                            <i class="fab fa-youtube"></i>
+                            Watch Trailer
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="contact" class="contact fade-in">
+        <h2 class="section-title">Let's Connect</h2>
+        <p>I'm always open to discussing new opportunities, collaborations, or just talking about game development!</p>
+        <div class="contact-links">
+            <a href="mailto:Idrees.aziz@metu.edu.tr" class="contact-link">
+                <i class="fas fa-envelope"></i>
+                Email Me
+            </a>
+            <a href="https://linkedin.com/in/idrees-m-aziz" class="contact-link" target="_blank">
+                <i class="fab fa-linkedin"></i>
+                LinkedIn
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Idrees Aziz. Crafted with passion for game development.</p>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Fade in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Active nav link highlighting
+        window.addEventListener('scroll', () => {
+            let current = '';
+            const sections = document.querySelectorAll('section');
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Gallery functionality
+        const galleries = {
+            'indelirium': { currentSlide: 0, totalSlides: 6 },
+            'keebee': { currentSlide: 0, totalSlides: 3 }
+        };
+
+        function changeSlide(projectName, direction) {
+            const gallery = galleries[projectName];
+            const container = document.getElementById(`${projectName}-gallery`);
+            
+            gallery.currentSlide += direction;
+            
+            if (gallery.currentSlide >= gallery.totalSlides) {
+                gallery.currentSlide = 0;
+            } else if (gallery.currentSlide < 0) {
+                gallery.currentSlide = gallery.totalSlides - 1;
+            }
+            
+            updateGallery(projectName);
+        }
+
+        function goToSlide(projectName, slideIndex) {
+            const gallery = galleries[projectName];
+            gallery.currentSlide = slideIndex;
+            updateGallery(projectName);
+        }
+
+        function updateGallery(projectName) {
+            const gallery = galleries[projectName];
+            const container = document.getElementById(`${projectName}-gallery`);
+            const counter = document.getElementById(`${projectName}-counter`);
+            const dots = document.querySelectorAll(`#${projectName}-nav .gallery-dot`);
+            
+            // Update gallery position
+            const translateX = -gallery.currentSlide * 100;
+            container.style.transform = `translateX(${translateX}%)`;
+            
+            // Update counter
+            counter.textContent = `${gallery.currentSlide + 1} / ${gallery.totalSlides}`;
+            
+            // Update dots
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === gallery.currentSlide);
+            });
+        }
+
+        // Auto-advance galleries
+        function startAutoSlide() {
+            setInterval(() => {
+                Object.keys(galleries).forEach(projectName => {
+                    changeSlide(projectName, 1);
+                });
+            }, 5000); // Change slide every 5 seconds
+        }
+
+        // Start auto-slide when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            startAutoSlide();
+        });
+    </script>
+</body>
+</html>
